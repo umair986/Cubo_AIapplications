@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper Transcription</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #output { margin-top: 20px; }
+        .download-link { display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Upload an Audio File for Transcription</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload & Transcribe</button>
+    <div id="output"></div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            document.getElementById("output").innerHTML = "Uploading and processing...";
+
+            try {
+                const response = await fetch("/transcribe/", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById("output").innerHTML = `
+                        <h3>Transcription Completed</h3>
+                        <a class="download-link" href="${data.text_file}" download>Download TXT</a>
+                        <a class="download-link" href="${data.srt_file}" download>Download SRT</a>
+                        <a class="download-link" href="${data.json_file}" download>Download JSON</a>
+                    `;
+                } else {
+                    document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById("output").innerHTML = `<p style="color:red;">Failed to upload file.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
