@@ -2,11 +2,12 @@ from fastapi import FastAPI, UploadFile, File, Header, HTTPException
 import whisper
 import torch
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+API_TOKEN = os.getenv("API_TOKEN")
 
 app = FastAPI()
-
-# Define a fixed API token (You can change this)
-API_TOKEN = "Cubo123!@#"
 
 # Load Whisper model (automatically uses CUDA if available)
 device = "cuda" if torch.cuda.is_available() else "cpu"
