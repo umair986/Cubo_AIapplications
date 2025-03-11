@@ -1,0 +1,7 @@
+openai
+deepgram-sdk
+pydub
+numpy
+sounddevice
+twilio
+python-dotenv
