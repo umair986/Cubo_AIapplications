@@ -1,0 +1,6 @@
+pyaudio
+websocket-client
+python-dotenv
+deepgram-sdk
+openai
+
